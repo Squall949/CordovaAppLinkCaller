@@ -2,29 +2,41 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.asus.applinkcaller"
+    id="com.asus.applinkreceiver"
     version="0.0.1">
-    <name>AppLinkCaller</name>
-    <description>AppLinkCaller Plugin</description>
+    <name>DeepLinkReceiver</name>
+    <description>DeepLinkReceiver Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,applink</keywords>
 
-    <js-module src="www/AppLinkCaller.js" name="AppLinkCaller">
-        <clobbers target="plugins.AppLinkCaller" />
+    <js-module src="www/DeepLinkReceiver.js" name="DeepLinkReceiver">
+        <clobbers target="plugins.DeepLinkReceiver" />
     </js-module>
 
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="AppLinkCaller" >
-                <param name="android-package" value="com.asus.applinkcaller.AppLinkCaller"/>
+            <feature name="DeepLinkReceiver" >
+                <param name="android-package" value="com.asus.applinkreceiver.DeepLinkReceiver"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/AppLinkCaller.java" target-dir="src/com/asus/applinkcaller" />
-        <source-file src="src/lib/bolts-android-1.1.2.jar" target-dir="libs" />
+        <source-file src="src/android/DeepLinkReceiver.java" target-dir="src/com/asus/applinkreceiver" />
+        <source-file src="src/android/DeepLinkRcvActivity.java" target-dir="src/com/asus/applinkreceiver" />
+        <source-file src="src/android/DeepLinkService.java" target-dir="src/com/asus/applinkreceiver" />
+        <source-file src="src/android/HybridAppBroadcastRcver.java" target-dir="src/com/asus/applinkreceiver" />
         <config-file target="AndroidManifest.xml" parent="/manifest">
-          <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity android:name="com.asus.applinkreceiver.DeepLinkRcvActivity" android:exported="true"></activity>
+            <service android:name="com.asus.applinkreceiver.DeepLinkService" />
+            <receiver android:name="com.asus.applinkreceiver.HybridAppBroadcastRcver">
+                <intent-filter>
+                    <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                </intent-filter>
+            </receiver>
         </config-file>
     </platform>
 </plugin>
